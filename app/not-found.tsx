@@ -1,4 +1,17 @@
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "404 - Sayfa Bulunamadı | Examen",
+  description: "Aradığınız sayfa bulunamadı",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#0ea5e9",
+};
 
 export default function NotFound() {
   return (
