@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import MultipleChoiceQuestion from "@/components/MultipleChoiceQuestion";
@@ -14,7 +14,9 @@ import {
   QuestionCategory,
 } from "@/data/questions";
 
-export default function ExamPage() {
+export const dynamic = "force-dynamic";
+
+function ExamContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category") as QuestionCategory | null;
 
@@ -414,5 +416,22 @@ export default function ExamPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ExamPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-br from-primary-50 via-accent-50 to-primary-100 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Yükleniyor...</p>
+          </div>
+        </div>
+      }
+    >
+      <ExamContent />
+    </Suspense>
   );
 }
