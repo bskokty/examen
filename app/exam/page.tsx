@@ -33,7 +33,10 @@ function ExamContent() {
     ? getQuestionsByCategory(categoryParam)
     : questions;
 
-  const currentQuestion = examQuestions[currentQuestionIndex];
+  const currentQuestion =
+    examQuestions.length > 0 && examQuestions[currentQuestionIndex]
+      ? examQuestions[currentQuestionIndex]
+      : null;
   const progress =
     examQuestions.length > 0
       ? ((currentQuestionIndex + 1) / examQuestions.length) * 100
@@ -48,7 +51,7 @@ function ExamContent() {
     if (currentQuestion) {
       setShowTip(true);
     }
-  }, [currentQuestionIndex]);
+  }, [currentQuestionIndex, currentQuestion]);
 
   const handleAnswer = (answer: any) => {
     setAnswers({
@@ -99,6 +102,24 @@ function ExamContent() {
               ? `"${categoryParam}" kategorisinde soru bulunamadı.`
               : "Soru bulunamadı."}
           </p>
+          <Link
+            href="/"
+            className="inline-block bg-gradient-to-r from-primary-600 to-accent-600 text-white font-semibold px-6 py-3 rounded-xl hover:shadow-lg transition-all"
+          >
+            Ana Sayfaya Dön
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentQuestion) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-accent-50 to-primary-100 flex items-center justify-center px-4">
+        <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            Soru yükleniyor...
+          </h2>
           <Link
             href="/"
             className="inline-block bg-gradient-to-r from-primary-600 to-accent-600 text-white font-semibold px-6 py-3 rounded-xl hover:shadow-lg transition-all"
@@ -259,7 +280,7 @@ function ExamContent() {
         </div>
 
         {/* Tip Card */}
-        {showTip && currentQuestion.tip && (
+        {showTip && currentQuestion?.tip && (
           <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
             <div className="flex items-start">
               <div className="flex-shrink-0">
@@ -278,7 +299,7 @@ function ExamContent() {
               <div className="ml-3 flex-1">
                 <p className="text-sm text-yellow-700 font-medium">İpucu</p>
                 <p className="text-sm text-yellow-600 mt-1">
-                  {currentQuestion.tip}
+                  {currentQuestion?.tip}
                 </p>
               </div>
               <button
@@ -392,14 +413,14 @@ function ExamContent() {
           >
             Önceki
           </button>
-          {currentQuestion.type === "multiple-choice" && !showExplanation && (
+          {currentQuestion?.type === "multiple-choice" && !showExplanation && (
             <button
               onClick={() => {
-                if (answers[currentQuestion.id]) {
+                if (currentQuestion && answers[currentQuestion.id]) {
                   setShowExplanation(true);
                 }
               }}
-              disabled={!answers[currentQuestion.id]}
+              disabled={!currentQuestion || !answers[currentQuestion.id]}
               className="flex-1 bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               Cevabı Kontrol Et
