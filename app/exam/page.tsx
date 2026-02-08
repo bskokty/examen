@@ -14,8 +14,6 @@ import {
   QuestionCategory,
 } from "@/data/questions";
 
-export const dynamic = "force-dynamic";
-
 function ExamContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category") as QuestionCategory | null;
